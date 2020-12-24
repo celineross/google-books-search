@@ -7,6 +7,8 @@ import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, TextArea, FormBtn } from "../components/Form";
 
+import BookCard from "../components/BookCard";
+
 function Books() {
   // Setting our component's initial state
   const [books, setBooks] = useState([])
@@ -87,9 +89,14 @@ function handleSearch(event) {
             </Jumbotron>
             {books.length ? (
               <List>
-                {/* {books.map(book => (
-                  //create card for search results and map attributes here
-                ))} */}
+                {books.map(book => (
+                  <BookCard
+                  image={book.volumeInfo.imageLinks.small}
+                  title={book.volumeInfo.title}
+                  author={book.volumeInfo.authors}
+                  synopsis={book.volumeInfo.description}
+                  ></BookCard>
+                ))}
               </List>
             ) : (
               <h3>No Results to Display</h3>
