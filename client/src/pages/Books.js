@@ -37,7 +37,13 @@ function Books() {
   function handleInputChange(event) {
     const { name, value } = event.target;
     setFormObject({...formObject, [name]: value})
-  };
+};
+
+function handleSearch(event) {
+    event.preventDefault();
+    API.searchBooks(formObject.title)
+      .then(res => setBooks(res.data.items))
+  }
 
   // When the form is submitted, use the API.saveBook method to save the book data
   // Then reload books from the database
@@ -67,21 +73,11 @@ function Books() {
                 name="title"
                 placeholder="Title (required)"
               />
-              <Input
-                onChange={handleInputChange}
-                name="author"
-                placeholder="Author (required)"
-              />
-              <TextArea
-                onChange={handleInputChange}
-                name="synopsis"
-                placeholder="Synopsis (Optional)"
-              />
               <FormBtn
-                disabled={!(formObject.author && formObject.title)}
+                disabled={!(formObject.title)}
                 onClick={handleFormSubmit}
               >
-                Submit Book
+                Search for Books!
               </FormBtn>
             </form>
           </Col>
@@ -91,16 +87,9 @@ function Books() {
             </Jumbotron>
             {books.length ? (
               <List>
-                {books.map(book => (
-                  <ListItem key={book._id}>
-                    <Link to={"/books/" + book._id}>
-                      <strong>
-                        {book.title} by {book.author}
-                      </strong>
-                    </Link>
-                    <DeleteBtn onClick={() => deleteBook(book._id)} />
-                  </ListItem>
-                ))}
+                {/* {books.map(book => (
+                  //create card for search results and map attributes here
+                ))} */}
               </List>
             ) : (
               <h3>No Results to Display</h3>
