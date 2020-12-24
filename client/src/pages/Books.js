@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
-import DeleteBtn from "../components/DeleteBtn";
-import Jumbotron from "../components/Jumbotron";
+import React, { useState } from "react";
 import API from "../utils/API";
-import { Link } from "react-router-dom";
+
+import Jumbotron from "../components/Jumbotron";
 import { Col, Row, Container } from "../components/Grid";
-import { List, ListItem } from "../components/List";
-import { Input, TextArea, FormBtn } from "../components/Form";
+import { List } from "../components/List";
+import { Input, FormBtn } from "../components/Form";
 
 import BookCard from "../components/BookCard";
 
@@ -14,98 +13,76 @@ function Books() {
   const [books, setBooks] = useState([])
   const [formObject, setFormObject] = useState({})
 
-  // Load all books and store them with setBooks
-  useEffect(() => {
-    loadBooks()
-  }, [])
-
-  // Loads all books and sets them to books
-  function loadBooks() {
-    API.getBooks()
-      .then(res => 
-        setBooks(res.data)
-      )
-      .catch(err => console.log(err));
+  // Handles updating component state when the user types into the input field
+  function handleInputChange(e) {
+    const { name, value } = e.target;
+    setFormObject({ ...formObject, [name]: value })
   };
 
-  // Deletes a book from the database with a given id, then reloads books from the db
-  function deleteBook(id) {
-    API.deleteBook(id)
-      .then(res => loadBooks())
-      .catch(err => console.log(err));
-  }
-
-  // Handles updating component state when the user types into the input field
-  function handleInputChange(event) {
-    const { name, value } = event.target;
-    setFormObject({...formObject, [name]: value})
-};
-
-function handleSearch(event) {
-    event.preventDefault();
-    API.searchBooks(formObject.title)
+  function handleSearch(e) {
+    e.preventDefault();
+    API.bookSearch(formObject.title)
       .then(res => setBooks(res.data.items))
   }
 
   // When the form is submitted, use the API.saveBook method to save the book data
   // Then reload books from the database
-  function handleFormSubmit(event) {
-    event.preventDefault();
-    if (formObject.title && formObject.author) {
-      API.saveBook({
-        title: formObject.title,
-        author: formObject.author,
-        synopsis: formObject.synopsis
-      })
-        .then(res => loadBooks())
-        .catch(err => console.log(err));
-    }
-  };
+  function handleFavorite(e, book) {
+    e.preventDefault();
+    API.saveBook({
+      image: book.volumeInfo.imageLinks.smallThumbnail,
+      title: book.volumeInfo.title,
+      author: book.volumeInfo.authors,
+      synopsis: book.volumeInfo.description
+    })
+  }
 
-    return (
-      <Container fluid>
-        <Row>
-          <Col size="md-6">
-            <Jumbotron>
-              <h1>What Books Should I Read?</h1>
-            </Jumbotron>
-            <form>
-              <Input
-                onChange={handleInputChange}
-                name="title"
-                placeholder="Title (required)"
-              />
-              <FormBtn
-                disabled={!(formObject.title)}
-                onClick={handleFormSubmit}
-              >
-                Search for Books!
+  return (
+    <Container fluid>
+      <Row>
+        <Col size="md-6">
+          <Jumbotron>
+            <h1>What Books Should I Read?</h1>
+          </Jumbotron>
+          <form>
+            <Input
+              onChange={handleInputChange}
+              name="title"
+              placeholder="Title (required)"
+            />
+            <FormBtn
+              disabled={!(formObject.title)}
+              onClick={handleSearch}
+            >
+              Search for Books!
               </FormBtn>
-            </form>
-          </Col>
-          <Col size="md-6 sm-12">
-            <Jumbotron>
-              <h1>Books On My List</h1>
-            </Jumbotron>
-            {books.length ? (
-              <List>
-                {books.map(book => (
-                  <BookCard
+          </form>
+        </Col>
+        <Col size="md-6 sm-12">
+          <Jumbotron>
+            <h1>Search Results</h1>
+          </Jumbotron>
+          {books.length ? (
+            <List>
+              {books.map(book => (
+                <BookCard
                   image={book.volumeInfo.imageLinks.small}
                   title={book.volumeInfo.title}
                   author={book.volumeInfo.authors}
                   synopsis={book.volumeInfo.description}
-                  ></BookCard>
-                ))}
-              </List>
-            ) : (
+                  handleClick={(e) => handleFavorite(e, book)}
+                  toggle="Favorite"
+                />
+              ))}
+            </List>
+          ) : (
               <h3>No Results to Display</h3>
             )}
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
+        </Col>
+      </Row>
+    </Container>
+  );
+}
 
 
 export default Books;

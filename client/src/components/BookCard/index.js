@@ -2,7 +2,7 @@ import React from "react";
 
 function BookCard(props) {
     return (
-        <div className="card">
+        <div className="card" style={{ margin: "5px" }}>
             <div className="img-container">
                 <img alt={props.title} src={props.image} />
             </div>
@@ -27,8 +27,7 @@ function BookCard(props) {
                 className="btn btn-dark"
                 onClick={props.handleClick}
                 key={props.id}
-            >
-                Add to List
+            > {props.toggle}
             </button>
         </div>
     )
