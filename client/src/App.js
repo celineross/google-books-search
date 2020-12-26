@@ -26,6 +26,7 @@ function App() {
           <Route exact path="/404">
             <NoMatch />
           </Route>
+          
         </Switch>
       </div>
     </Router>
