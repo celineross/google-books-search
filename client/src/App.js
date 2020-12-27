@@ -19,11 +19,11 @@ function App() {
             <Books />
           </Route>
 
-          <Route exact path="/favorites">
+          <Route exact path={["/", "/favorites"]}>
             <Favorites />
           </Route>
 
-          <Route exact path="/404">
+          <Route>
             <NoMatch />
           </Route>
           

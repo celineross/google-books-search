@@ -3,7 +3,7 @@ import API from "../utils/API";
 
 import Jumbotron from "../components/Jumbotron";
 import { Col, Row, Container } from "../components/Grid";
-import { List } from "../components/List";
+import { List, ListItem } from "../components/List";
 import { Input, FormBtn } from "../components/Form";
 
 import BookCard from "../components/BookCard";
@@ -30,7 +30,8 @@ function Books() {
   function handleFavorite(e, book) {
     e.preventDefault();
     API.saveBook({
-      image: book.volumeInfo.imageLinks.smallThumbnail,
+      _id: book.id,
+      image: book.volumeInfo.imageLinks.thumbnail,
       title: book.volumeInfo.title,
       author: book.volumeInfo.authors,
       synopsis: book.volumeInfo.description
@@ -65,14 +66,17 @@ function Books() {
           {books.length ? (
             <List>
               {books.map(book => (
-                <BookCard
-                  image={book.volumeInfo.imageLinks.small}
-                  title={book.volumeInfo.title}
-                  author={book.volumeInfo.authors}
-                  synopsis={book.volumeInfo.description}
-                  handleClick={(e) => handleFavorite(e, book)}
-                  toggle="Favorite"
-                />
+                <ListItem key={book.id}>
+                  <BookCard
+                    _id={book.id}
+                    image={book.volumeInfo.imageLinks.thumbnail}
+                    title={book.volumeInfo.title}
+                    author={book.volumeInfo.authors}
+                    synopsis={book.volumeInfo.description}
+                    handleClick={(e) => handleFavorite(e, book)}
+                    toggle="Favorite"
+                  />
+                </ListItem>
               ))}
             </List>
           ) : (

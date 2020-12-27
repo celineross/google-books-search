@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import API from "../utils/API";
 
-import SearchedCard from "../components/BookCard";
+import BookCard from "../components/BookCard";
 import { Container } from "../components/Grid";
-import { List } from "../components/List";
+import { List, ListItem } from "../components/List";
 
 function Favorites() {
     // Setting our component's initial state
-    const [books, setBooks] = useState([])
+    const [books, setBooks] = useState([]);
 
     // Load all books and store them with setBooks
     useEffect(() => {
@@ -36,14 +36,17 @@ function Favorites() {
             {books.length ? (
                 <List>
                     {books.map(book => (
-                        <SearchedCard
-                            image={book.image}
-                            title={book.title}
-                            author={book.author}
-                            synopsis={book.synopsis}
-                            handleClick={() => deleteBook(book._id)}
-                            toggle="Remove"
+                        <ListItem key={book.id}>
+                        <BookCard
+                          _id={book.id}
+                          image={book.volumeInfo.imageLinks.thumbnail}
+                          title={book.volumeInfo.title}
+                          author={book.volumeInfo.authors}
+                          synopsis={book.volumeInfo.description}
+                          handleClick={() => deleteBook(book._id)}
+                          toggle="Favorite"
                         />
+                      </ListItem>
                     ))}
                 </List>
             ) : (
