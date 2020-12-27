@@ -19,12 +19,6 @@ function BookCard(props) {
                     </li>
                 </ul>
             </div>
-            <button
-                type="button"
-                className="btn btn-dark"
-                onClick={props.handleClick}
-            > {props.toggle}
-            </button>
         </div>
     )
 }

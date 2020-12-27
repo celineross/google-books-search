@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import API from "../utils/API";
 
+import FavBtn from "../components/FavBtn";
+
 import Jumbotron from "../components/Jumbotron";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
@@ -27,14 +29,13 @@ function Books() {
 
   // When the form is submitted, use the API.saveBook method to save the book data
   // Then reload books from the database
-  function handleFavorite(e, book) {
-    e.preventDefault();
+  function handleFavorite(bookData) {
     API.saveBook({
-      _id: book.id,
-      image: book.volumeInfo.imageLinks.thumbnail,
-      title: book.volumeInfo.title,
-      author: book.volumeInfo.authors,
-      synopsis: book.volumeInfo.description
+      _id: bookData.id,
+      image: bookData.volumeInfo.imageLinks.thumbnail,
+      title: bookData.volumeInfo.title,
+      author: bookData.volumeInfo.authors,
+      synopsis: bookData.volumeInfo.description
     })
   }
 
@@ -68,14 +69,16 @@ function Books() {
               {books.map(book => (
                 <ListItem key={book.id}>
                   <BookCard
-                    _id={book.id}
+                    key={book.id}
                     image={book.volumeInfo.imageLinks.thumbnail}
                     title={book.volumeInfo.title}
                     author={book.volumeInfo.authors}
                     synopsis={book.volumeInfo.description}
                     handleClick={(e) => handleFavorite(e, book)}
+                    
                     toggle="Favorite"
                   />
+                  <FavBtn handleFavorite={handleFavorite} bookData={book} />
                 </ListItem>
               ))}
             </List>
