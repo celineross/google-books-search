@@ -35,20 +35,17 @@ function Favorites() {
             return book._id !== id;
         }))
     }
-
+    console.log(books)
 
     return (
         <Container fluid>
             {books.length > 0 ? (
                 <List>
                     {books.map(book => (
-                        <ListItem key={book.id}>
+                        <ListItem key={book._id}>
                             <BookCard
                                 key={book.id}
-                                image={book.volumeInfo.imageLinks.thumbnail}
-                                title={book.volumeInfo.title}
-                                author={book.volumeInfo.authors}
-                                synopsis={book.volumeInfo.description}
+                                book={book}
                             />
                             <DeleteBtn handleDeleteBook={handleDeleteBook} id={book._id} />
                         </ListItem>

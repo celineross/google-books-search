@@ -24,19 +24,18 @@ function Books() {
   function handleSearch(e) {
     e.preventDefault();
     API.bookSearch(formObject.title)
-      .then(res => setBooks(res.data.items))
+      .then(res => setBooks(res.data.items.map(bookData => ({
+        image: bookData.volumeInfo.imageLinks.thumbnail,
+        title: bookData.volumeInfo.title,
+        author: bookData.volumeInfo.authors,
+        synopsis: bookData.volumeInfo.description
+      }))))
   }
 
   // When the form is submitted, use the API.saveBook method to save the book data
   // Then reload books from the database
   function handleFavorite(bookData) {
-    API.saveBook({
-      _id: bookData.id,
-      image: bookData.volumeInfo.imageLinks.thumbnail,
-      title: bookData.volumeInfo.title,
-      author: bookData.volumeInfo.authors,
-      synopsis: bookData.volumeInfo.description
-    })
+    API.saveBook(bookData)
   }
 
   return (
@@ -66,16 +65,11 @@ function Books() {
           </Jumbotron>
           {books.length ? (
             <List>
-              {books.map(book => (
-                <ListItem key={book.id}>
+              {books.map((book, i) => (
+                <ListItem key={"book-" + i}>
                   <BookCard
-                    key={book.id}
-                    image={book.volumeInfo.imageLinks.thumbnail}
-                    title={book.volumeInfo.title}
-                    author={book.volumeInfo.authors}
-                    synopsis={book.volumeInfo.description}
-                    handleClick={(e) => handleFavorite(e, book)}
-                    
+                    book={book}
+                    handleClick={() => handleFavorite(book)}
                     toggle="Favorite"
                   />
                   <FavBtn handleFavorite={handleFavorite} bookData={book} />

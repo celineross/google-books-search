@@ -1,21 +1,21 @@
 import React from "react";
 
-function BookCard(props) {
+function BookCard({ book }) {
     return (
         <div className="card" style={{ margin: "5px" }}>
             <div style={{ textAlign: "center", margin: "5px" }} className="img-container">
-                <img alt={props.title} src={props.image} />
+                <img alt={book.title} src={book.image} />
             </div>
             <div className="content">
                 <ul>
                     <li>
-                        <strong>Title:</strong> {props.title}
+                        <strong>Title:</strong> {book.title}
                     </li>
                     <li>
-                        <strong>Author:</strong> {props.author}
+                        <strong>Author:</strong> {book.author}
                     </li>
                     <li>
-                        <strong>Synopsis:</strong> {props.synopsis}
+                        <strong>Synopsis:</strong> {book.synopsis}
                     </li>
                 </ul>
             </div>
